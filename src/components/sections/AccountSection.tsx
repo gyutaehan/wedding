@@ -103,7 +103,7 @@ export default function AccountSection({ onCopy }: Props) {
                   </div>
 
                   {/* Mother */}
-                  {import.meta.env.VITE_APP_VERSION === 'somi' && (
+                  {import.meta.env.VITE_APP_VERSION === 'common' && (
                   <>
                   <div className="border-t border-stone-100 w-full my-6" />
                   <div className="flex justify-between items-center">
