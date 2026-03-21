@@ -7,6 +7,11 @@ export default function Navigation() {
   const { lang, setLang, t } = useLanguage();
   const [activeSection, setActiveSection] = useState<string>('');
 
+  const isFatherVersion = import.meta.env.VITE_APP_VERSION !== 'somi' && import.meta.env.VITE_APP_VERSION !== 'common';
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const isFriends = urlParams.get('v') === 'friends';
+  const showAccount = !(isFatherVersion && isFriends);
+
   useEffect(() => {
     const sections = document.querySelectorAll('[id^="section-"]');
     const observer = new IntersectionObserver(
@@ -60,7 +65,7 @@ export default function Navigation() {
       <div className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border-b border-stone-100 dark:border-stone-800 py-4 px-1 shadow-sm transition-colors duration-300">
         <ul className="flex flex-row justify-between items-center text-[10px] font-medium tracking-tight text-stone-500 dark:text-stone-400 uppercase whitespace-nowrap">
           <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-invitation')} className={getButtonClass('section-invitation')}>{t('nav_invitation')}<ActiveIndicator sectionId="section-invitation" /></button></li>
-          {lang === 'ko' && <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-account')} className={getButtonClass('section-account')}>{t('nav_account')}<ActiveIndicator sectionId="section-account" /></button></li>}
+          {lang === 'ko' && showAccount && <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-account')} className={getButtonClass('section-account')}>{t('nav_account')}<ActiveIndicator sectionId="section-account" /></button></li>}
           <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-grid-gallery')} className={getButtonClass('section-grid-gallery')}>{t('nav_gallery')}<ActiveIndicator sectionId="section-grid-gallery" /></button></li>
           <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-dday')} className={getButtonClass('section-dday')}>{t('nav_dday')}<ActiveIndicator sectionId="section-dday" /></button></li>
           <li className="flex-1 text-center"><button onClick={() => scrollTo('#section-location')} className={getButtonClass('section-location')}>{t('nav_location')}<ActiveIndicator sectionId="section-location" /></button></li>
