@@ -45,11 +45,16 @@ export default function ShareSection({ onCopy }: Props) {
   }, { scope: containerRef, dependencies: [displayLang] });
 
   // 공유할 링크 설정 (여기에 실제 배포된 주소를 입력하면 고정된 링크로 공유됩니다)
-  const shareUrl = import.meta.env.VITE_APP_VERSION === 'somi' 
+  let shareUrl = import.meta.env.VITE_APP_VERSION === 'somi' 
     ? 'https://kantmuyu.synology.me/wedding/' 
     : import.meta.env.VITE_APP_VERSION === 'common'
     ? 'https://yuntingyutae.redirectme.net/'
     : 'https://gyutaehan.github.io/wedding/'; // fath 및 기본값
+
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  if (urlParams.get('v') === 'friends') {
+    shareUrl += '?v=friends';
+  }
 
   const handleCopy = (text: string, message?: string) => {
     navigator.clipboard.writeText(text);
