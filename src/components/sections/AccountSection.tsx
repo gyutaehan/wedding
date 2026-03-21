@@ -18,6 +18,11 @@ export default function AccountSection({ onCopy }: Props) {
   const [displayLang, setDisplayLang] = useState(lang);
   const isFirstRender = useRef(true);
 
+  const isFatherVersion = import.meta.env.VITE_APP_VERSION !== 'somi' && import.meta.env.VITE_APP_VERSION !== 'common';
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const isFriends = urlParams.get('v') === 'friends';
+  const showAccount = !(isFatherVersion && isFriends);
+
   // Language Animation
   useGSAP(() => {
     if (lang !== displayLang) {
@@ -63,6 +68,8 @@ export default function AccountSection({ onCopy }: Props) {
     navigator.clipboard.writeText(text);
     onCopy(message || t('toast_account_copied'));
   };
+
+  if (!showAccount) return null;
 
   return (
     <section id="section-account" ref={containerRef} className="scroll-mt-24 w-full py-24 px-6 bg-stone-50 flex flex-col items-center">

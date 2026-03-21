@@ -43,6 +43,11 @@ export default function InfoSection({ onCopy }: Props) {
   const [displayLang, setDisplayLang] = useState(lang);
   const isFirstRender = useRef(true);
 
+  const isFatherVersion = import.meta.env.VITE_APP_VERSION !== 'somi' && import.meta.env.VITE_APP_VERSION !== 'common';
+  const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const isFriends = urlParams.get('v') === 'friends';
+  const showAccount = !(isFatherVersion && isFriends);
+
   // D-Day Logic
   useEffect(() => {
     const targetDate = new Date('2026-05-03T12:00:00');
@@ -255,80 +260,82 @@ export default function InfoSection({ onCopy }: Props) {
       </div>
 
       {/* Account */}
-      <div id="section-account" className="scroll-mt-24 info-item w-full max-w-md mx-auto">
-        {displayLang === 'ko' && (
-          <>
-            <h3 className="info-text text-xs tracking-[0.3em] text-stone-400 mb-8 text-center uppercase">{t('info_account_title', displayLang)}</h3>
-            
-            <button 
-                ref={accountRef}
-                onClick={() => setIsAccountOpen(!isAccountOpen)}
-                className="w-full flex items-center justify-between p-4 bg-white border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors shadow-sm"
-            >
-                <span className="info-text font-medium text-stone-700 text-sm">
-                    {t('account_toggle_btn', displayLang)}
-                </span>
-                {isAccountOpen ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
-            </button>
-
-            <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isAccountOpen ? 'max-h-[600px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
-                <div className="bg-white p-8 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-stone-100">
-                  {/* Father */}
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="info-text text-xs text-stone-400 block mb-1">{t('info_father', displayLang)}</span>
-                      <span className="font-medium text-stone-600">신한은행 110-374-581541</span>
-                      <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_name', displayLang)}</span>
+      {showAccount && (
+        <div id="section-account" className="scroll-mt-24 info-item w-full max-w-md mx-auto">
+          {displayLang === 'ko' && (
+            <>
+              <h3 className="info-text text-xs tracking-[0.3em] text-stone-400 mb-8 text-center uppercase">{t('info_account_title', displayLang)}</h3>
+              
+              <button 
+                  ref={accountRef}
+                  onClick={() => setIsAccountOpen(!isAccountOpen)}
+                  className="w-full flex items-center justify-between p-4 bg-white border border-stone-200 rounded-xl hover:bg-stone-50 transition-colors shadow-sm"
+              >
+                  <span className="info-text font-medium text-stone-700 text-sm">
+                      {t('account_toggle_btn', displayLang)}
+                  </span>
+                  {isAccountOpen ? <ChevronUp className="w-4 h-4 text-stone-400" /> : <ChevronDown className="w-4 h-4 text-stone-400" />}
+              </button>
+  
+              <div className={`overflow-hidden transition-all duration-500 ease-in-out ${isAccountOpen ? 'max-h-[600px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
+                  <div className="bg-white p-8 rounded-2xl shadow-[0_4px_20px_rgb(0,0,0,0.05)] border border-stone-100">
+                    {/* Father */}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="info-text text-xs text-stone-400 block mb-1">{t('info_father', displayLang)}</span>
+                        <span className="font-medium text-stone-600">신한은행 110-374-581541</span>
+                        <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_name', displayLang)}</span>
+                      </div>
+                      <button 
+                          onClick={() => handleCopy('110374581541')}
+                          className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
+                      >
+                        <span className="info-text">{t('info_copy', displayLang)}</span>
+                      </button>
                     </div>
-                    <button 
-                        onClick={() => handleCopy('110374581541')}
-                        className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
-                    >
-                      <span className="info-text">{t('info_copy', displayLang)}</span>
-                    </button>
-                  </div>
-
-                  {/* Mother */}
-                  {import.meta.env.VITE_APP_VERSION === 'common' && (
-                  <>
-                  <div className="border-t border-stone-100 w-full my-6" />
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="info-text text-xs text-stone-400 block mb-1">{t('info_mother', displayLang)}</span>
-                      <span className="font-medium text-stone-600">{t('account_groom_mother_account', displayLang)}</span>
-                      <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_mother_name', displayLang)}</span>
+  
+                    {/* Mother */}
+                    {import.meta.env.VITE_APP_VERSION === 'common' && (
+                    <>
+                    <div className="border-t border-stone-100 w-full my-6" />
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="info-text text-xs text-stone-400 block mb-1">{t('info_mother', displayLang)}</span>
+                        <span className="font-medium text-stone-600">{t('account_groom_mother_account', displayLang)}</span>
+                        <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_mother_name', displayLang)}</span>
+                      </div>
+                      <button 
+                          onClick={() => handleCopy('11240104031863')}
+                          className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
+                      >
+                        <span className="info-text">{t('info_copy', displayLang)}</span>
+                      </button>
                     </div>
-                    <button 
-                        onClick={() => handleCopy('11240104031863')}
-                        className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
-                    >
-                      <span className="info-text">{t('info_copy', displayLang)}</span>
-                    </button>
-                  </div>
-                  </>
-                  )}
-
-                  <div className="border-t border-stone-100 w-full my-6" />
-
-                  {/* Groom */}
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <span className="info-text text-xs text-stone-400 block mb-1">{t('info_groom', displayLang)}</span>
-                      <span className="font-medium text-stone-600">{t('account_groom_self_account', displayLang)}</span>
-                      <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_self_name', displayLang)}</span>
+                    </>
+                    )}
+  
+                    <div className="border-t border-stone-100 w-full my-6" />
+  
+                    {/* Groom */}
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <span className="info-text text-xs text-stone-400 block mb-1">{t('info_groom', displayLang)}</span>
+                        <span className="font-medium text-stone-600">{t('account_groom_self_account', displayLang)}</span>
+                        <span className="info-text text-xs text-stone-400 ml-2">{t('account_groom_self_name', displayLang)}</span>
+                      </div>
+                      <button 
+                          onClick={() => handleCopy('30491066092807')}
+                          className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
+                      >
+                        <span className="info-text">{t('info_copy', displayLang)}</span>
+                      </button>
                     </div>
-                    <button 
-                        onClick={() => handleCopy('30491066092807')}
-                        className="px-3 py-1.5 text-xs border border-stone-200 rounded-full hover:bg-stone-50 transition-colors text-stone-500"
-                    >
-                      <span className="info-text">{t('info_copy', displayLang)}</span>
-                    </button>
                   </div>
-                </div>
-            </div>
-          </>
-        )}
-      </div>
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </section>
   );
 }
