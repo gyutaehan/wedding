@@ -149,9 +149,9 @@ export default function Guestbook() {
           <div key={msg.id} className="guestbook-item bg-white p-5 rounded-xl border border-stone-100 shadow-sm relative group">
             <div className="flex justify-between items-start mb-2">
               <span className="font-medium text-stone-800">{msg.name}</span>
-              <span className="text-[10px] text-stone-400">
+              {/* <span className="text-[10px] text-stone-400">
                 {msg.createdAt?.toDate().toLocaleDateString()}
-              </span>
+              </span> */}
             </div>
             <p className="text-stone-600 text-sm whitespace-pre-wrap leading-relaxed">{msg.message}</p>
             <button 
